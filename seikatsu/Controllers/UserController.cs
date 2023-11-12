@@ -40,6 +40,7 @@ namespace seikatsu.Controllers
         [HttpPost]
         public ActionResult<Users> Post([FromBody] Users user)
         {
+            
             userService.Create(user);
 
             return CreatedAtAction(nameof(Get), new { id = user.Id }, user);

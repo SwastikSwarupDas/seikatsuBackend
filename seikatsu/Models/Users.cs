@@ -23,8 +23,8 @@ namespace seikatsu.Models
         [BsonElement("usertype")]
         public string Usertype { get; set; } = String.Empty;
 
-        [BsonElement("properties")]
-        public string[]? Properties { get; set; }
+        [BsonElement("propertyIds")]
+        public string[] PropertyIds { get; set; } = Array.Empty<string>();
 
     }
 }
