@@ -2,6 +2,9 @@ using MongoDB.Driver;
 using seikatsu.Models;
 using Microsoft.Extensions.Options;
 using seikatsu.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +32,16 @@ new MongoClient(builder.Configuration.GetValue<string>("PropertiesSettings:Conne
 
 builder.Services.AddScoped<IPropertiesService, PropertiesService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+    });
+});
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -47,6 +60,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.MapControllers();
 
