@@ -18,6 +18,17 @@ new MongoClient(builder.Configuration.GetValue<string>("UsersSettings:Connection
 
 builder.Services.AddScoped<IUsersService, UsersService>();
 
+builder.Services.Configure<PropertiesSettings>(
+    builder.Configuration.GetSection(nameof(PropertiesSettings)));
+
+builder.Services.AddSingleton<IPropertiesSettings>(sp =>
+sp.GetRequiredService<IOptions<PropertiesSettings>>().Value);
+
+builder.Services.AddSingleton<IMongoClient>(s =>
+new MongoClient(builder.Configuration.GetValue<string>("PropertiesSettings:ConnectionString")));
+
+builder.Services.AddScoped<IPropertiesService, PropertiesService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

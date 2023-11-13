@@ -22,7 +22,7 @@ namespace seikatsu.Models
         public string PropertyName { get; set; } = String.Empty;
 
         [BsonElement("geolocation")]
-        public GeoLocation GeoLocation { get; set; }
+        public GeoLocation? GeoLocation { get; set; } = null;
 
     }
     
