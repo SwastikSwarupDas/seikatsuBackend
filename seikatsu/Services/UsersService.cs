@@ -24,9 +24,9 @@ namespace seikatsu.Services
             return _users.Find(user => true).ToList();
         }
 
-        public Users Get(string id)
+        public Users Get(string username)
         {
-            return _users.Find(user => user.Id == id).FirstOrDefault();
+            return _users.Find(user => user.Username == username).FirstOrDefault();
         }
 
         public void Remove(string id)
@@ -34,9 +34,18 @@ namespace seikatsu.Services
             _users.DeleteOne(user => user.Id == id);
         }
 
-        public void Update(string id, Users user)
+        public void Update(string username, Users user)
         {
-            _users.ReplaceOne(user => user.Id == id, user);
+            _users.ReplaceOne(user => user.Username == username, user);
+        }
+
+        public bool CheckUserAlreadyPresent(string userName, string email)
+        {
+            var UserExists = _users.Find(user=>user.Username==userName).FirstOrDefault();
+            var EmailExists = _users.Find(user=>user.Email==email).FirstOrDefault();
+            if (UserExists!=null && EmailExists!=null)
+                return true;
+            return false;
         }
     }
 }

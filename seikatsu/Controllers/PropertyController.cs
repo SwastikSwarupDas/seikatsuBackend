@@ -16,14 +16,14 @@ namespace seikatsu.Controllers
         {
             this.propertiesService = propertiesService;
         }
-        // GET: api/<StudentsController>
+    
         [HttpGet]
         public ActionResult<List<Properties>> Get()
         {
             return propertiesService.Get();
         }
 
-        // GET api/<StudentsController>/5
+
         [HttpGet("{id}")]
         public ActionResult<Properties> Get(string id)
         {
@@ -40,10 +40,13 @@ namespace seikatsu.Controllers
         [HttpPost]
         public ActionResult<Properties> Post([FromBody] Properties property)
         {
+            if (!propertiesService.CheckPropertyAlreadyPresent(property.SKU))
+            { 
+                propertiesService.Create(property);
 
-            propertiesService.Create(property);
-
-            return CreatedAtAction(nameof(Get), new { id = property.Id }, property);
+                return CreatedAtAction(nameof(Get), new { id = property.Id }, property);
+            }
+            return BadRequest();
         }
 
         // PUT api/<StudentsController>/5

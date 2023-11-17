@@ -24,14 +24,14 @@ namespace seikatsu.Controllers
         }
 
         // GET api/<StudentsController>/5
-        [HttpGet("{id}")]
-        public ActionResult<Users> Get(string id)
+        [HttpGet("{username}")]
+        public ActionResult<Users> Get(string username)
         {
-            var user = userService.Get(id);
+            var user = userService.Get(username);
 
             if (user == null)
             {
-                return NotFound($"User with Id = {id} not found");
+                return NotFound($"User with Username = {username} not found");
             }
             return user;
         }
@@ -40,26 +40,48 @@ namespace seikatsu.Controllers
         [HttpPost]
         public ActionResult<Users> Post([FromBody] Users user)
         {
-            
-            userService.Create(user);
 
-            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
+            if (!userService.CheckUserAlreadyPresent(user.Username,user.Email))
+            {
+                userService.Create(user);
+
+                return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
+            }
+
+            return BadRequest();
         }
 
+      
         // PUT api/<StudentsController>/5
-        [HttpPut("{id}")]
-        public ActionResult<Users> Put(string id, [FromBody] Users user)
+        [HttpPut("{username}")]
+        public ActionResult<Users> Put(string username, [FromBody] Users user)
         {
-            var existingUser = userService.Get(id);
+            var existingUser = userService.Get(username);
 
             if (existingUser == null)
             {
-                return NotFound($"User with id = {id} not found");
+                return NotFound($"User with username = {username} not found");
             }
 
-            userService.Update(id, user);
+            userService.Update(username, user);
 
             return NoContent();
+        }
+
+        [HttpPatch("addproperty")]
+        public ActionResult<Users> Patch(string username, [FromBody] Users user)
+        {
+            var existingUser = userService.Get(username);
+
+            if(existingUser == null)
+            {
+                return NotFound($"User with username = {username} not found");
+            }
+
+            existingUser.PropertyIds = existingUser.PropertyIds.Concat(user.PropertyIds).ToArray();
+            userService.Update(existingUser.Username, existingUser);
+
+            return Ok(new { Message = "User updated successfully!" });
         }
 
         // DELETE api/<StudentsController>/5
@@ -77,5 +99,8 @@ namespace seikatsu.Controllers
 
             return Ok($"User with Id = {id} successfully removed");
         }
+    
     }
+
+    
 }

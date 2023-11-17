@@ -21,6 +21,16 @@ namespace seikatsu.Models
         [BsonElement("propertyName")]
         public string PropertyName { get; set; } = String.Empty;
 
+        [BsonElement("price")]
+        public string Price { get; set; } = String.Empty;
+
+        [BsonElement("userIds")]
+
+        public string UserIds {  get; set; } = String.Empty;
+
+        [BsonElement("sku")]
+        public string SKU { get; set; } = string.Empty;
+
         [BsonElement("geolocation")]
         public GeoLocation? GeoLocation { get; set; } = null;
 

@@ -38,5 +38,17 @@ namespace seikatsu.Services
         {
             _properties.ReplaceOne(property => property.Id == id, property);
         }
+
+        public bool CheckPropertyAlreadyPresent(string SKU)
+        {
+            var PropertyExists = _properties.Find(property=>property.SKU == SKU).FirstOrDefault();
+
+            if (PropertyExists != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

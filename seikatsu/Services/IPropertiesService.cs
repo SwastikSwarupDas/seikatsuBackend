@@ -13,5 +13,7 @@ namespace seikatsu.Services
 
         void Remove(string id);
 
+        bool CheckPropertyAlreadyPresent(string SKU);
+
     }
 }
