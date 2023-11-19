@@ -32,6 +32,17 @@ new MongoClient(builder.Configuration.GetValue<string>("PropertiesSettings:Conne
 
 builder.Services.AddScoped<IPropertiesService, PropertiesService>();
 
+builder.Services.Configure<NotifSettings>(
+    builder.Configuration.GetSection(nameof(NotifSettings)));
+
+builder.Services.AddSingleton<INotifSettings>(sp =>
+sp.GetRequiredService<IOptions<NotifSettings>>().Value);
+
+builder.Services.AddSingleton<IMongoClient>(s =>
+new MongoClient(builder.Configuration.GetValue<string>("NotifSettings:ConnectionString")));
+
+builder.Services.AddScoped<INotifService, NotifService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", builder =>
